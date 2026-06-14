@@ -6,13 +6,24 @@ relatively prime, if input values are ordered, the gcf of input values, if input
 pair form are factors of one another,
 """
 
+"""
+CHANGES FROM DAY 1:
+    New functions
+    Converted printing with '.format' to the f"" method instead
+    """
+
+
+import math
+import textwrap
+    # We import 'textwrap' to eliminate extra indents/spacing in multi-line strings
+
 
 
 class Operations:
     def __init__(self,num_set):
-        # if type(num_set) is int:
-        #     # Terminate instantiation if only a single input is passed
-        #     raise TypeError("A single integer value cannot be used for the 'Operation' class.")
+        if type(num_set) is int:
+            # Terminate instantiation if only a single input is passed
+            raise TypeError("A single integer value cannot be used for the 'Operation' class.")
         values_types = [type(x) for x in num_set]
         if len(set(values_types)) > 1:
             # Terminate instantiation if input values have more than one type, unless...
@@ -28,8 +39,6 @@ class Operations:
         elif values_types[0] not in [int,float]:
             # Check if input values are all of the 'int' or 'float' type
             raise TypeError("The 'Operation' class only accepts 'int' or 'float' values.")
-        else:
-            pass
         self.num_set = num_set
     
     
@@ -37,7 +46,7 @@ class Operations:
         """
         Displays the values of the object.
         """
-        print("Input is '{}' of type '{}'".format(self.num_set,type(self.num_set)))
+        print(f"Input is '{self.num_set}' of type '{type(self.num_set).__name__}'")
         
         
     def pair_check(self):
@@ -143,8 +152,6 @@ class Operations:
             raise TypeError((
                 "Sets of values can only be relatively prime if all elements are integers."
                 ))
-        else:
-            pass
         for pos in range(len(values)-1):
             x = values[pos]
             rest = values[pos+1:]
@@ -154,27 +161,85 @@ class Operations:
                     if prime_comp == 0:
                         pass
                     else:
-                        print("The values in '{}' are not relatively prime.".format(values))
-                        return False
+                        print(f"Values in '{values}' are relatively prime to one another.")
+                        return True
                 else:
                     prime_comp = y % x
                     if prime_comp == 0:
                         pass
                     else:
-                        print("The values in '{}' are not relatively prime.".format(values))
-                        return False
-        print("Values in '{}' are relatively prime to one another.".format(values))
-        return True
+                        print(f"Values in '{values}' are relatively prime to one another.")
+                        return True
+        print(f"The values in '{values}' are not relatively prime.")
+        return False
             
                    
             
-    def order(self):
-        pass
+    def order(self, sort_source = False):
+        """
+        Takes the input values and returns a sorted list (or tuple, if the input values are of the 
+        tuple type). In generally, this does not alter the original order of input values,
+        'num_set'; however, passing the optional parameter 'sort_source = True' will alter the
+        num_set attribute of self to be ordered.
+
+        Parameters
+        ----------
+        sort_source : TYPE, optional
+            Boolean that determines whether 'self.num_set' should be ordered. The default is False.
+
+        Returns
+        -------
+        Returns the sorted set of values
+        """
+        x = self.num_set
+        y = list(x)
+        y.sort()
+        if type(x) == tuple:
+            # If 'self.num_set' is of type tuple, transforms the temporary list back to tuple type
+            y = tuple(y)
+        print(f"These are the sorted values: {y}")
+        if sort_source == True:
+            # Orders the original self.num_set values if optional boolean is passed as True
+            self.num_set = y
+        return y
     
     
     
-    def gcf(self):
-        pass
+    def gcf(self, factors = False):
+        """
+        Computes the greatest common factor/divisor for the list of inputs. If an optional boolean
+        parameter is passed, returns the factors of each respective value. If the greatest common
+        factor for the set of values is '1', indicates that the values are relatively prime.
+
+        Parameters
+        ----------
+        factors : TYPE, optional
+            Can include the boolean value 'factors' to have the factored values returned. The 
+            default is False.
+
+        Returns
+        -------
+        TYPE
+            Returns the greatest common factor if it exists and the list of factored values if 
+            indicated. Even if 'factors' is set to true, relatively prime numbers will not return
+            the "factored" results.
+        """
+        
+        fact = math.gcd(*self.num_set)
+        if fact == 1:
+            print("The values are relatively prime.")
+            return fact
+        elif factors == True:
+            facts = [x/fact for x in self.num_set]
+            message = f"""
+            The greatest common factor of the values is: {fact}
+            The factors of each value is, respectively: {facts}
+            """
+            print(textwrap.dedent(message).strip()) #This strips the extra indents from the front
+            return fact, facts
+        else:
+            print(f"The greatest common factor of the values is: {fact}")
+            return fact
             
     
     
@@ -192,26 +257,24 @@ class Operations:
         check = self.pair_check()
         if check is False:
             raise IndexError("Function 'divis' is only defined for pairs of numbers.")
-        else:
-            pass
         (x,y) = self.num_set
         if x >= y:
             rem = x % y
             if rem == 0:
                 factor = int(x/y)
-                print("{} is divisible by {} by the factor {}.".format(x,y,factor))
+                print(f"{x} is divisible by {y} by the factor {factor}.")
                 return True, factor
             else:
-                print("{} is NOT divisible by {}.".format(x,y))
+                print(f"{x} is NOT divisible by {y}.")
                 return False
         else:
             rem = y % x
             if rem == 0:
                 factor = int(y/x)
-                print("{} is divisible by {} by the factor {}.".format(y,x,factor))
+                print(f"{y} is divisible by {x} by the factor {factor}.")
                 return True, factor
             else:
-                print("{} is NOT divisible by {}.".format(y,x))
+                print(f"{y} is NOT divisible by {x}.")
                 return False
             
             
