@@ -1,2 +1,2 @@
 # Python_Classes
-Contains various OOP/classes created in Python
+Contains classes that I have created in Python
