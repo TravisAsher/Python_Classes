@@ -6,12 +6,6 @@ relatively prime, if input values are ordered, the gcf of input values, if input
 pair form are factors of one another,
 """
 
-"""
-CHANGES FROM DAY 1:
-    New functions
-    Converted printing with '.format' to the f"" method instead
-    """
-
 
 import math
 import textwrap
